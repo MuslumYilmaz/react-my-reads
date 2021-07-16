@@ -17,11 +17,16 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll()
             .then(books => {
-              console.log(books);
               this.setState(() => ({
                 books
               }))
             })
+  }
+
+  handleChange(book, event) {
+    console.log(event.target.value);
+    console.log(book);
+    // this.setState({value: event.target.value});
   }
 
   render() {
@@ -57,16 +62,15 @@ class BooksApp extends React.Component {
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
                   {this.state.books.map((book, i) => {
-                    console.log(book);
                     return book.shelf === "currentlyReading" && (
-                    <div className="bookshelf-books">
+                    <div className="bookshelf-books" key={i}>
                     <ol className="books-grid">
-                      <li key={i}>
+                      <li>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select value={book.shelf} onChange={(e) => this.handleChange(book, e)}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -87,16 +91,15 @@ class BooksApp extends React.Component {
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
                   {this.state.books.map((book, i) => {
-                    console.log(book);
                     return book.shelf === "wantToRead" && (
-                    <div className="bookshelf-books">
+                    <div className="bookshelf-books" key={i}>
                     <ol className="books-grid">
-                      <li key={i}>
+                      <li>
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select value={book.shelf} onChange={(e) => this.handleChange(book, e)}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -117,16 +120,15 @@ class BooksApp extends React.Component {
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
                   {this.state.books.map((book, i) => {
-                    console.log(book);
                     return book.shelf === "read" && (
-                    <div className="bookshelf-books">
+                    <div className="bookshelf-books" key={i}>
                     <ol className="books-grid">
-                      <li key={i}>
+                      <li >
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                             <div className="book-shelf-changer">
-                              <select>
+                              <select value={book.shelf} onChange={(e) => this.handleChange(book, e)}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
