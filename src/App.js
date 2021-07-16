@@ -25,7 +25,18 @@ class BooksApp extends React.Component {
 
   handleChange(book, event) {
     console.log(event.target.value);
-    console.log(book);
+
+
+    const books = [...this.state.books];
+
+    books.filter(b => b === book);
+    book.shelf = event.target.value;
+    books.concat(book);
+
+    this.setState({
+      books
+    })
+
     // this.setState({value: event.target.value});
   }
 
