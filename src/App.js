@@ -28,11 +28,8 @@ class BooksApp extends React.Component {
   handleChange(book, event) {
     const books = [...this.state.books];
 
-    books.find(b => {
-      if (b === book) {
-        book.shelf = event.target.value;
-      }
-    });
+    books.filter(b => b === book)
+         .map(book => book.shelf = event.target.value);
 
     this.setState({
       books
