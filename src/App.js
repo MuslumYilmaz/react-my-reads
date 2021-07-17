@@ -51,6 +51,18 @@ class BooksApp extends React.Component {
     }
   }
 
+  addToShelf = (book, event) => {
+    book.shelf = event.target.value;
+
+    const books = [...this.state.books];
+
+    books.push(book);
+
+    this.setState({
+      books
+    })
+  }
+
 
   render() {
     const { query, books, showSearchPage, searchedBooks } = this.state;
@@ -77,7 +89,7 @@ class BooksApp extends React.Component {
                               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                         )}
                         <div className="book-shelf-changer">
-                              <select value={book.shelf} onChange={(e) => this.handleChange(book, e)}>
+                              <select value={book.shelf} onChange={(e) => this.addToShelf(book, e)}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
