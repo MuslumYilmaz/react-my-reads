@@ -5,6 +5,8 @@ import './App.css'
 class BooksApp extends React.Component {
   state = {
     books: [],
+    searchedBooks: [],
+    query: '',
     /**
      * TODO: Instead of using this state variable to keep track of which page
      * we're on, use the URL in the browser's address bar. This will ensure that
@@ -37,28 +39,56 @@ class BooksApp extends React.Component {
     })
   }
 
+  searchBooks = (query) => {
+    this.setState(() => ({
+      query: query.trim()
+    }));
+
+    if (query !== '') {
+      BooksAPI.search(query).then(searchedBooks => {
+        console.log(searchedBooks);
+          this.setState(() => ({
+            searchedBooks
+          }))
+      }).catch(err => console.log("err: " + err));
+    }
+  }
+
+
   render() {
+    const { query, books, showSearchPage, searchedBooks } = this.state;
+
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
+        {showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
               <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
               <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
-
+                <input type="text" placeholder="Search by title or author" value={query} onChange={(event) => this.searchBooks(event.target.value)} />
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+              {searchedBooks.map((book, i) => (
+                    <div className="bookshelf-books" key={i}>
+                    <ol className="books-grid">
+                      <li>
+                        <div className="book">
+                        { book.imageLinks !== undefined && (
+                          <div className="book-top">
+                              <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                          </div>
+                          )}
+                          <div className="book-title">{book.title}</div>
+                          <div className="book-authors">{book.authors}</div>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                  ))
+                  }
+              </ol>
             </div>
           </div>
         ) : (
@@ -69,7 +99,7 @@ class BooksApp extends React.Component {
             <div className="list-books-content">
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
-                  {this.state.books.map((book, i) => {
+                  {books.map((book, i) => {
                     return book.shelf === "currentlyReading" && (
                     <div className="bookshelf-books" key={i}>
                     <ol className="books-grid">
@@ -98,7 +128,7 @@ class BooksApp extends React.Component {
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
-                  {this.state.books.map((book, i) => {
+                  {books.map((book, i) => {
                     return book.shelf === "wantToRead" && (
                     <div className="bookshelf-books" key={i}>
                     <ol className="books-grid">
@@ -127,7 +157,7 @@ class BooksApp extends React.Component {
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
-                  {this.state.books.map((book, i) => {
+                  {books.map((book, i) => {
                     return book.shelf === "read" && (
                     <div className="bookshelf-books" key={i}>
                     <ol className="books-grid">
