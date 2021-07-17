@@ -33,7 +33,9 @@ class BooksApp extends React.Component {
 
     this.setState({
       books
-    })
+    });
+
+    BooksAPI.update(book, book.shelf);
   }
 
   searchBooks = (query) => {
@@ -60,7 +62,9 @@ class BooksApp extends React.Component {
 
     this.setState({
       books
-    })
+    });
+
+    BooksAPI.update(book, book.shelf);
   }
 
 
